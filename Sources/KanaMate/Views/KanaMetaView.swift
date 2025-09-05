@@ -4,37 +4,72 @@ public struct KanaMetaView: View {
     @StateObject private var kanaData = KanaData.shared
     @StateObject private var progressManager = ProgressManager.shared
     @StateObject private var audioManager = AudioManager.shared
+    @StateObject private var hapticManager = HapticManager.shared
+    @StateObject private var testingModeManager = TestingModeManager.shared
     
     @State private var currentKana: Kana?
     @State private var showingKana = false
     @State private var reviewKana: [Kana] = []
     @State private var currentIndex = 0
     @State private var showingStats = false
+    @State private var showingKanaChart = false
+    @State private var showingForgottenKana = false
     
     public init() {}
     
     public var body: some View {
         NavigationView {
             VStack(spacing: 30) {
-                // Header with stats
+                // Header with navigation
                 HStack {
-                    Button("Stats") {
+                    // Statistics button
+                    Button(action: {
+                        hapticManager.playLightImpact()
                         showingStats = true
+                    }) {
+                        Image(systemName: "chart.bar.fill")
+                            .font(.title2)
+                            .foregroundColor(.blue)
                     }
-                    .foregroundColor(.blue)
+                    
+                    // Forgotten kana button
+                    Button(action: {
+                        hapticManager.playLightImpact()
+                        showingForgottenKana = true
+                    }) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.title2)
+                            .foregroundColor(.orange)
+                    }
                     
                     Spacer()
                     
-                    Text("KanaMate")
-                        .font(.title2)
-                        .fontWeight(.bold)
+                    // App title
+                    Text("📚")
+                        .font(.title)
                     
                     Spacer()
                     
-                    Button("Reset") {
+                    // Kana chart button
+                    Button(action: {
+                        hapticManager.playLightImpact()
+                        showingKanaChart = true
+                    }) {
+                        Image(systemName: "grid.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.purple)
+                    }
+                    
+                    // Testing mode toggle
+                    Button(action: {
+                        hapticManager.playMediumImpact()
+                        testingModeManager.switchMode()
                         resetLearningSession()
+                    }) {
+                        Image(systemName: testingModeManager.currentMode.icon)
+                            .font(.title2)
+                            .foregroundColor(.green)
                     }
-                    .foregroundColor(.orange)
                 }
                 .padding(.horizontal)
                 
@@ -73,11 +108,12 @@ public struct KanaMetaView: View {
                                 
                                 // Audio button
                                 Button(action: {
+                                    hapticManager.playLightImpact()
                                     audioManager.playPronunciation(for: kana)
                                 }) {
                                     HStack {
                                         Image(systemName: "speaker.wave.2.fill")
-                                        Text("Play Sound")
+                                        Text("🔊")
                                     }
                                     .font(.title3)
                                     .foregroundColor(.white)
@@ -87,14 +123,20 @@ public struct KanaMetaView: View {
                                 }
                                 
                                 // Continue button when kana is showing
-                                Button("Continue") {
+                                Button(action: {
+                                    hapticManager.playLightImpact()
                                     nextKana()
+                                }) {
+                                    HStack {
+                                        Image(systemName: "arrow.right.circle.fill")
+                                        Text("➡️")
+                                    }
+                                    .font(.title2)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(12)
                                 }
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(12)
                             }
                             .transition(.opacity)
                         } else {
@@ -107,7 +149,7 @@ public struct KanaMetaView: View {
                                     VStack {
                                         Text("✔️")
                                             .font(.system(size: 50))
-                                        Text("Know")
+                                        Text("😊")
                                             .font(.title2)
                                             .fontWeight(.semibold)
                                     }
@@ -124,7 +166,7 @@ public struct KanaMetaView: View {
                                     VStack {
                                         Text("❌")
                                             .font(.system(size: 50))
-                                        Text("Don't Know")
+                                        Text("🤔")
                                             .font(.title3)
                                             .fontWeight(.semibold)
                                     }
@@ -142,21 +184,28 @@ public struct KanaMetaView: View {
                         VStack(spacing: 10) {
                             Text("🇯🇵")
                                 .font(.system(size: 80))
-                            Text("Welcome to KanaMate")
+                            Text("📚 かなメモ")
                                 .font(.title)
                                 .fontWeight(.bold)
-                            Text("Learn Japanese Kana")
+                            Text("🎯 日本語 かな")
                                 .font(.title3)
                                 .foregroundColor(.secondary)
                         }
                         
-                        Button("Start Learning") {
+                        Button(action: {
+                            hapticManager.playMediumImpact()
                             startLearningSession()
+                        }) {
+                            HStack {
+                                Image(systemName: "play.circle.fill")
+                                Text("🚀")
+                            }
+                            .font(.title2)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(12)
                         }
-                        .font(.title2)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
                         .cornerRadius(12)
                     }
                 }
@@ -166,17 +215,23 @@ public struct KanaMetaView: View {
                 // Progress indicator
                 if !reviewKana.isEmpty {
                     HStack {
-                        Text("Progress: \(currentIndex + 1) / \(reviewKana.count)")
+                        Text("📊 \(currentIndex + 1) / \(reviewKana.count)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         
                         Spacer()
                         
                         if let kana = currentKana {
-                            Text("Category: \(kana.category.rawValue)")
+                            Text("\(categoryIcon(for: kana.category)) \(kana.category.rawValue)")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
+                        
+                        Spacer()
+                        
+                        Text("\(testingModeManager.currentMode.icon) \(testingModeManager.currentMode.rawValue)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                     .padding(.horizontal)
                 }
@@ -184,6 +239,12 @@ public struct KanaMetaView: View {
             .padding()
             .sheet(isPresented: $showingStats) {
                 StatsView()
+            }
+            .sheet(isPresented: $showingKanaChart) {
+                KanaChartView()
+            }
+            .sheet(isPresented: $showingForgottenKana) {
+                ForgottenKanaView()
             }
         }
         .onAppear {
@@ -196,8 +257,25 @@ public struct KanaMetaView: View {
     
     // MARK: - Helper Methods
     
+    private func categoryIcon(for category: Kana.KanaCategory) -> String {
+        switch category {
+        case .basic:
+            return "🔤"
+        case .voiced:
+            return "🔊"
+        case .semiVoiced:
+            return "🎵"
+        case .combination:
+            return "🔗"
+        }
+    }
+    
     private func startLearningSession() {
-        reviewKana = progressManager.getKanaForReview(from: kanaData.allKana, limit: 20)
+        reviewKana = testingModeManager.getKanaForReview(
+            from: kanaData.allKana,
+            progressManager: progressManager,
+            limit: 20
+        )
         currentIndex = 0
         if !reviewKana.isEmpty {
             currentKana = reviewKana[currentIndex]
@@ -213,9 +291,11 @@ public struct KanaMetaView: View {
         guard let kana = currentKana else { return }
         
         if correct {
+            hapticManager.playSuccessHaptic()
             progressManager.recordCorrectAnswer(for: kana.id)
             nextKana()
         } else {
+            hapticManager.playErrorHaptic()
             progressManager.recordIncorrectAnswer(for: kana.id)
             withAnimation(.easeInOut(duration: 0.3)) {
                 showingKana = true
@@ -246,9 +326,9 @@ struct StatsView: View {
                 let stats = progressManager.getOverallStats()
                 
                 VStack(spacing: 15) {
-                    StatRow(label: "Total Kana", value: "\(stats.totalKana)")
-                    StatRow(label: "Studied Kana", value: "\(stats.studiedKana)")
-                    StatRow(label: "Success Rate", value: "\(Int(stats.averageSuccessRate * 100))%")
+                    StatRow(icon: "📚", label: "Total", value: "\(stats.totalKana)")
+                    StatRow(icon: "🎯", label: "Studied", value: "\(stats.studiedKana)")
+                    StatRow(icon: "✅", label: "Success", value: "\(Int(stats.averageSuccessRate * 100))%")
                 }
                 .padding()
                 .background(Color.gray.opacity(0.1))
@@ -257,20 +337,27 @@ struct StatsView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Statistics")
-            .navigationBarItems(trailing: Button("Done") {
+            .navigationTitle("📊")
+            .navigationBarItems(trailing: Button(action: {
                 presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(.secondary)
             })
         }
     }
 }
 
 struct StatRow: View {
+    let icon: String
     let label: String
     let value: String
     
     var body: some View {
         HStack {
+            Text(icon)
+                .font(.title2)
             Text(label)
                 .font(.body)
             Spacer()
