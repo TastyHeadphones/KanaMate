@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView: View {
+public struct KanaMetaView: View {
     @StateObject private var kanaData = KanaData.shared
     @StateObject private var progressManager = ProgressManager.shared
     @StateObject private var audioManager = AudioManager.shared
@@ -11,7 +11,9 @@ struct ContentView: View {
     @State private var currentIndex = 0
     @State private var showingStats = false
     
-    var body: some View {
+    public init() {}
+    
+    public var body: some View {
         NavigationView {
             VStack(spacing: 30) {
                 // Header with stats
@@ -276,11 +278,5 @@ struct StatRow: View {
                 .font(.body)
                 .fontWeight(.semibold)
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
