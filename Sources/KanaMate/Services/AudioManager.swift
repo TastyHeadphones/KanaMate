@@ -1,5 +1,10 @@
 import Foundation
+#if canImport(AVFoundation)
 import AVFoundation
+#endif
+#if canImport(AudioToolbox)
+import AudioToolbox
+#endif
 
 /// Manages audio playback for kana pronunciation
 class AudioManager: ObservableObject {
@@ -13,12 +18,14 @@ class AudioManager: ObservableObject {
     
     /// Setup audio session for playback
     private func setupAudioSession() {
+        #if canImport(AVFoundation)
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             print("Failed to setup audio session: \(error)")
         }
+        #endif
     }
     
     /// Play pronunciation for a given kana
@@ -49,7 +56,9 @@ class AudioManager: ObservableObject {
     /// Play a system sound as placeholder
     private func playSystemSound() {
         // Using system sound as placeholder for kana pronunciation
+        #if canImport(AudioToolbox)
         AudioServicesPlaySystemSound(1016) // Keyboard click sound
+        #endif
     }
     
     /// Stop any currently playing audio
@@ -58,5 +67,3 @@ class AudioManager: ObservableObject {
     }
 }
 
-// Import for system sounds
-import AudioToolbox

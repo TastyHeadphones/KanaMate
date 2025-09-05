@@ -1,10 +1,10 @@
-# KanaMate App UI Description
+# KanaMate App UI Description - Enhanced Version
 
 ## Main Learning Screen
 
 ```
 ┌─────────────────────────┐
-│ Stats      KanaMate  Reset│  <- Header with navigation
+│📊💭    📚    📖🔀      │  <- Enhanced header: stats, forgotten, title, chart, mode
 ├─────────────────────────┤
 │                         │
 │                         │
@@ -13,13 +13,13 @@
 │                         │
 │                         │
 │     ┌─────┐ ┌─────┐     │
-│     │ ✔️  │ │ ❌  │     │  <- Answer buttons
-│     │Know │ │Don't│     │
-│     │     │ │Know │     │
+│     │ ✔️  │ │ ❌  │     │  <- Answer buttons with emojis
+│     │ 😊  │ │ 🤔  │     │
+│     │     │ │     │     │
 │     └─────┘ └─────┘     │
 │                         │
 │                         │
-│ Progress: 3/20  Basic   │  <- Progress indicator
+│📊 3/20  🔤Basic  🔀Random│  <- Progress with icons
 └─────────────────────────┘
 ```
 
@@ -27,7 +27,7 @@
 
 ```
 ┌─────────────────────────┐
-│ Stats      KanaMate  Reset│
+│📊💭    📚    📖🔀      │
 ├─────────────────────────┤
 │                         │
 │          ka             │  <- Original romaji
@@ -38,18 +38,82 @@
 │   (60pt)    (60pt)      │
 │                         │
 │   ┌─────────────────┐   │
-│   │ 🔊 Play Sound   │   │  <- Audio button
+│   │🔊 Play Sound 🔊 │   │  <- Audio button with icons
 │   └─────────────────┘   │
 │                         │
 │   ┌─────────────────┐   │
-│   │    Continue     │   │  <- Continue button
+│   │ ➡️ Continue     │   │  <- Continue with arrow
 │   └─────────────────┘   │
 │                         │
-│ Progress: 3/20  Basic   │
+│📊 3/20  🔤Basic  🔀Random│
 └─────────────────────────┘
 ```
 
-## Welcome Screen
+## 🆕 Kana Chart Browser Screen
+
+```
+┌─────────────────────────┐
+│         📖         ✖    │  <- Chart view with close button
+├─────────────────────────┤
+│🔤Basic 🔊Voiced 🎵Semi  │  <- Category selector tabs
+│              🔗Combo    │
+├─────────────────────────┤
+│ ┌─────┐ ┌─────┐ ┌─────┐ │
+│ │  a  │ │  i  │ │  u  │ │  <- 3-column grid
+│ │ あ  │ │ い  │ │ う  │ │
+│ │ ア  │ │ イ  │ │ ウ  │ │
+│ │ 🔊  │ │ 🔊  │ │ 🔊  │ │  <- Audio icons
+│ └─────┘ └─────┘ └─────┘ │
+│ ┌─────┐ ┌─────┐ ┌─────┐ │
+│ │  e  │ │  o  │ │ ka  │ │
+│ │ え  │ │ お  │ │ か  │ │
+│ │ エ  │ │ オ  │ │ カ  │ │
+│ │ 🔊  │ │ 🔊  │ │ 🔊  │ │
+│ └─────┘ └─────┘ └─────┘ │
+└─────────────────────────┘
+```
+
+## 🆕 Forgotten Kana History Screen
+
+```
+┌─────────────────────────┐
+│         💭         ✖    │  <- History view with close button
+├─────────────────────────┤
+│    📝 Frequently        │
+│    Forgotten            │
+│   3 kana need review    │
+├─────────────────────────┤
+│🔴 あ ア (a)    ❌5  🔊  │  <- High difficulty (red)
+│                ✅2  67% │
+├─────────────────────────┤
+│🟡 か カ (ka)   ❌3  🔊  │  <- Medium difficulty (yellow)
+│                ✅4  57% │
+├─────────────────────────┤
+│🟢 さ サ (sa)   ❌1  🔊  │  <- Low difficulty (green)
+│                ✅8  89% │
+└─────────────────────────┘
+```
+
+## 🆕 Welcome Screen (Enhanced)
+
+```
+┌─────────────────────────┐
+│📊💭    📚    📖🔀      │
+├─────────────────────────┤
+│                         │
+│         🇯🇵             │  <- Flag emoji (120pt)
+│                         │
+│     📚 かなメモ        │  <- Japanese title
+│                         │
+│    🎯 日本語 かな     │  <- Japanese subtitle
+│                         │
+│                         │
+│   ┌─────────────────┐   │
+│   │ 🚀 Start       │   │  <- Rocket icon start
+│   └─────────────────┘   │
+│                         │
+└─────────────────────────┘
+```
 
 ```
 ┌─────────────────────────┐
@@ -120,3 +184,38 @@ This design prioritizes:
 ✅ Clear visual hierarchy
 ✅ Accessible button sizes
 ✅ Intuitive user flow
+✅ 🆕 Icon-only interface without English words
+✅ 🆕 Haptic feedback for enhanced user experience
+✅ 🆕 Multiple testing modes for varied learning
+✅ 🆕 Complete kana browsing and history features
+
+## Enhanced Features Summary
+
+### 🎮 New Haptic Feedback
+- **Success Haptic**: Gentle success vibration for correct answers
+- **Error Haptic**: Sharp error vibration for incorrect answers  
+- **Light Impact**: Subtle feedback for button taps
+- **Medium Impact**: Stronger feedback for mode changes
+
+### 🎯 Testing Modes
+- **Random Mode** 🔀: Shuffled kana for varied practice
+- **Sequential Mode** 📋: Gojūon order for systematic learning
+- Easy toggle between modes in main interface
+
+### 📖 Complete Kana Chart Browser
+- **Category-based organization**: Basic 🔤, Voiced 🔊, Semi-voiced 🎵, Combination 🔗
+- **3-column grid layout** for easy browsing
+- **Instant audio playback** for any kana
+- **Complete coverage** of all 140+ characters
+
+### 💭 Enhanced Forgotten Kana History
+- **Difficulty visualization**: 🔴 High, 🟡 Medium, 🟢 Low difficulty kana
+- **Detailed statistics**: Error count, success count, success rate
+- **Sorted by frequency**: Most forgotten kana appear first
+- **Quick audio review**: Play pronunciation for any forgotten kana
+
+### 🌐 Icon-Only Interface
+- **Zero English words** in the interface
+- **Emoji-based navigation**: 📊 Stats, 💭 History, 📖 Chart, 🔀/📋 Mode
+- **Intuitive symbols**: ✔️😊 Know, ❌🤔 Don't Know, 🔊 Audio, ➡️ Continue
+- **Japanese text only**: 📚 かなメモ, 🎯 日本語 かな
