@@ -63,8 +63,15 @@ swift demo.swift
 # Run tests
 swift test
 
-# For iOS deployment: Import into Xcode project
+# Open iOS app in Xcode
+open KanaMate.xcodeproj
 ```
+
+### 📱 Running the iOS App
+1. Open `KanaMate.xcodeproj` in Xcode
+2. Select an iOS simulator or device
+3. Press ▶️ to build and run the app
+4. The app is ready to use with full kana learning functionality!
 
 ### 📖 Documentation
 - [Implementation Guide](IMPLEMENTATION.md) - Detailed technical documentation
