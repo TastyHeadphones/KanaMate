@@ -19,36 +19,62 @@ struct ForgottenKanaView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                if forgottenKana.isEmpty {
-                    // Empty state
-                    VStack(spacing: 20) {
-                        Text("🎉")
-                            .font(.system(size: 80))
-                        
-                        Text("Perfect Memory!")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                        
-                        Text("You haven't forgotten any kana yet")
-                            .font(.body)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    // Header stats
-                    VStack(spacing: 10) {
-                        Text("📝 Frequently Forgotten")
-                            .font(.headline)
-                        
-                        Text("\(forgottenKana.count) kana need review")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding()
+            ZStack {
+                // Glass effect background
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.orange.opacity(0.1),
+                        Color.red.opacity(0.05),
+                        Color.pink.opacity(0.08)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                VStack {
+                    if forgottenKana.isEmpty {
+                        // Empty state with glass effect
+                        VStack(spacing: 20) {
+                            Text("🎉")
+                                .font(.system(size: 80))
+                            
+                            Text("Perfect Memory!")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            
+                            Text("You haven't forgotten any kana yet")
+                                .font(.body)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(30)
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 25))
+                        .shadow(color: .black.opacity(0.1), radius: 15, x: 0, y: 8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 25)
+                                .stroke(LinearGradient(
+                                    gradient: Gradient(colors: [.white.opacity(0.3), .clear]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ), lineWidth: 1)
+                        )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        // Header stats with glass effect
+                        VStack(spacing: 10) {
+                            Text("📝 Frequently Forgotten")
+                                .font(.headline)
+                            
+                            Text("\(forgottenKana.count) kana need review")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 15))
+                        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
                     
-                    // Forgotten kana list
+                    // Forgotten kana list with glass effect
                     List {
                         ForEach(forgottenKana, id: \.0.id) { kana, progress in
                             ForgottenKanaRow(
@@ -59,8 +85,11 @@ struct ForgottenKanaView: View {
                                     audioManager.playPronunciation(for: kana)
                                 }
                             )
+                            .listRowBackground(.thinMaterial)
+                            .listRowSeparator(.hidden)
                         }
                     }
+                    .scrollContentBackground(.hidden)
                 }
             }
             .navigationTitle("💭")
@@ -71,6 +100,9 @@ struct ForgottenKanaView: View {
                     Image(systemName: "xmark.circle.fill")
                         .font(.title2)
                         .foregroundColor(.secondary)
+                        .padding(8)
+                        .background(.ultraThinMaterial, in: Circle())
+                        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
                 }
             )
         }
@@ -94,20 +126,29 @@ struct ForgottenKanaRow: View {
     
     var body: some View {
         HStack(spacing: 15) {
-            // Difficulty indicator
+            // Difficulty indicator with glass effect
             Text(difficultLevel)
                 .font(.title2)
+                .padding(8)
+                .background(.ultraThinMaterial, in: Circle())
+                .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 1)
             
-            // Kana display
+            // Kana display with glass containers
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
                     Text(kana.hiragana)
                         .font(.title3)
                         .foregroundColor(.blue)
+                        .padding(6)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 6))
+                        .shadow(color: .blue.opacity(0.2), radius: 2, x: 0, y: 1)
                     
                     Text(kana.katakana)
                         .font(.title3)
                         .foregroundColor(.red)
+                        .padding(6)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 6))
+                        .shadow(color: .red.opacity(0.2), radius: 2, x: 0, y: 1)
                 }
                 
                 Text(kana.romaji)
@@ -117,7 +158,7 @@ struct ForgottenKanaRow: View {
             
             Spacer()
             
-            // Stats
+            // Stats with glass container
             VStack(alignment: .trailing, spacing: 2) {
                 Text("❌ \(progress.incorrectCount)")
                     .font(.caption)
@@ -133,16 +174,24 @@ struct ForgottenKanaRow: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            .padding(8)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+            .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 1)
             
-            // Play button
+            // Play button with glass effect
             Button(action: onPlay) {
                 Image(systemName: "speaker.wave.2.fill")
                     .font(.title3)
                     .foregroundColor(.green)
+                    .padding(8)
+                    .background(.ultraThinMaterial, in: Circle())
+                    .shadow(color: .green.opacity(0.2), radius: 3, x: 0, y: 1)
             }
             .buttonStyle(PlainButtonStyle())
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 8)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
 }
 
